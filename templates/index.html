@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Risk Assessment System - Negros Oriental</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Disaster Risk Assessment System</h1>
+            <p>Negros Oriental Hazard Mapping & Analysis</p>
+        </header>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="search-container">
+                    <input type="text" id="location-search" placeholder="Search for a location...">
+                    <button id="search-btn">Search</button>
+                </div>
+            </div>
+            
+            <div class="nav-right">
+                <div class="layer-toggles">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="flood-toggle" checked>
+                        <span class="toggle-text">Flood Susceptibility</span>
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="landslide-toggle" checked>
+                        <span class="toggle-text">Landslide Susceptibility</span>
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="liquefaction-toggle" checked>
+                        <span class="toggle-text">Liquefaction Susceptibility</span>
+                    </label>
+                </div>
+                
+                <button id="upload-btn" class="upload-button">Upload Shapefile</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Map Container -->
+            <div id="map" class="map-container"></div>
+            
+            <!-- Sidebar (Initially Hidden) -->
+            <div id="sidebar" class="sidebar hidden">
+                <h3>Location Information</h3>
+                <div id="location-info">
+                    <p>Select a location on the map to view hazard information</p>
+                </div>
+                
+                <div id="hazard-info" class="hazard-section">
+                    <h4>Disaster Susceptibility</h4>
+                    <div id="hazard-details"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Modal -->
+        <div id="upload-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Upload Shapefile</h3>
+                    <span class="close-btn" id="close-modal">&times;</span>
+                </div>
+                
+                <div class="modal-body">
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="dataset-type">Dataset Type:</label>
+                            <select id="dataset-type" name="dataset_type" required>
+                                <option value="">Select dataset type...</option>
+                                <option value="flood">Flood Susceptibility</option>
+                                <option value="landslide">Landslide Susceptibility</option>
+                                <option value="liquefaction">Liquefaction Susceptibility</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="shapefile-input">Shapefile (ZIP format):</label>
+                            <input type="file" id="shapefile-input" name="shapefile" accept=".zip" required>
+                            <small>Upload a ZIP file containing .shp, .shx, .dbf, and .prj files</small>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Upload & Process</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-upload">Cancel</button>
+                        </div>
+                    </form>
+                    
+                    <div id="upload-progress" class="hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <p>Processing shapefile...</p>
+                    </div>
+                    
+                    <div id="upload-result" class="hidden">
+                        <div id="result-message"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h4>Hazard Levels</h4>
+            <div class="legend-item">
+                <span class="legend-color low"></span>
+                <span>Low Susceptibility (LS)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color moderate"></span>
+                <span>Moderate Susceptibility (MS)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color high"></span>
+                <span>High Susceptibility (HS)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color very-high"></span>
+                <span>Very High Susceptibility (VHS)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="/static/js/map.js"></script>
+</body>
+</html>
