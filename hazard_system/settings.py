@@ -1,12 +1,14 @@
 import os
 from pathlib import Path
 
-# GDAL Configuration for Windows - Using OSGeo4W installation
 if os.name == 'nt':  # Windows
-    GDAL_LIBRARY_PATH = r'C:\Users\User\AppData\Local\Programs\OSGeo4W\bin\gdal311.dll'
-    GEOS_LIBRARY_PATH = r'C:\Users\User\AppData\Local\Programs\OSGeo4W\bin\geos_c.dll'
-    PROJ_LIB = r'C:\Program Files\PostgreSQL\16\share\contrib\postgis-3.5\proj'
-    GDAL_DATA = r'C:\Program Files\PostgreSQL\16\gdal-data'
+    OSGEO4W = r"C:\Users\User\AppData\Local\Programs\OSGeo4W"
+
+    GDAL_LIBRARY_PATH = os.path.join(OSGEO4W, 'bin', 'gdal311.dll')
+    GEOS_LIBRARY_PATH = os.path.join(OSGEO4W, 'bin', 'geos_c.dll')
+
+    os.environ['GDAL_DATA'] = os.path.join(OSGEO4W, 'share', 'gdal')
+    os.environ['PROJ_LIB'] = os.path.join(OSGEO4W, 'share', 'proj')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,7 +70,7 @@ WSGI_APPLICATION = 'hazard_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'disaster_risk_db',
+        'NAME': 'arise',
         'USER': 'postgres',  # Change to your PostgreSQL username
         'PASSWORD': 'admin123',  # Change to your PostgreSQL password
         'HOST': 'localhost',
@@ -103,4 +105,16 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
+}
+
+# Caching Configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'osrm_cache_table',
+        'TIMEOUT': 60 * 60 * 24 * 7,  # 7 days
+        'OPTIONS': {
+            'MAX_ENTRIES': 10000  # Store up to 10k cached locations
+        }
+    }
 }
